@@ -1,14 +1,12 @@
 <?php
-
-/*
-* Pager Class 
-*
-* @author Hong Young Hoon <eric.hong81@gmail.com>;
-* @version 0.1
-* @access public
-* @package System
-*/
-
+/**
+ * Pager Class 
+ *
+ * @author Hong Young Hoon <eric.hong81@gmail.com>;
+ * @version 0.1
+ * @access public
+ * @package System
+ */
 class Nayuda_Utility_Pager extends Nayuda_Object{
 	protected $totalPageNum;	// total page
 	protected $PagePerRow;		// the row number per page
@@ -121,7 +119,7 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 			}else{
 				$printPageNumber=$i;
 			}
-			$mainPageView .= "[<a href=".$link."Page=".$i."&PageG=".$this->PageG.">".$printPageNumber."</a>]";
+			$mainPageView .= "<li><a href=".$link."Page=".$i."&PageG=".$this->PageG.">".$printPageNumber."</a></li>";
 		}
 		return $mainPageView;
 	}
@@ -177,7 +175,7 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 			echo "";
 		}else{
 			$nextpage = ($this->PageG) * $this->limitPagenum+1;
-			$nextPageView = "[<a href=".$link."Page=".$nextpage."&PageG=".($this->PageG+1).">".$this->iterNextPage."</a>]";
+			$nextPageView = "<li><a href=".$link."Page=".$nextpage."&PageG=".($this->PageG+1).">".$this->iterNextPage."</a></li>";
 		
 			return $nextPageView;
 		}
@@ -207,7 +205,6 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 		}
 	}
 
-	
 	/**
     * display the link of the previous page after the current page list
     *
@@ -227,7 +224,7 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 				$prevpage=($this->PageG-2) * $this->limitPagenum+1;
 			}
 		
-		$prevPageView = "[<a href=".$link."&Page=".$prevpage."&PageG=".($this->PageG-1).">".$this->iterPrevPage."</a>]";
+		$prevPageView = "<li><a href=".$link."&Page=".$prevpage."&PageG=".($this->PageG-1).">".$this->iterPrevPage."</a><li>";
 		
 		return $prevPageView;
 		}
@@ -282,7 +279,6 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * setPagePerRow()
 	 * set the row number per page
 	 * public
@@ -296,7 +292,6 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * getPagePerRow()
 	 * get the row number per page
 	 * public
@@ -310,7 +305,6 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 	}
 	
 	/**
-	 *  
 	 * setlimitPagenum()
 	 * set limit number of the page
 	 * public
@@ -324,7 +318,6 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * getlimitPagenum()
 	 * get limit number of the page
 	 * public
