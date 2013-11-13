@@ -1,4 +1,4 @@
 Nayuda Framework 2.0.0
 
-you can check about the information of this software in below
+you can check about the information of this software in below \n
 http://framework.nayuda.com
