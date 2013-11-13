@@ -1,14 +1,15 @@
 <?php
-/*
-* session
-*
-* @author Hong Young Hoon <eric.hong81@gmail.com>;
-* @version 0.2
-* @access public
-* @package AUTH
-*/
+/**
+ * Nayuda Framework (http://framework.nayuda.com/)
+ *
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
+ */
+namespace Nayuda\Session;
+use Nayuda\Session;
 
-class Nayuda_Session_DbTest extends Nayuda_Session_Abstract {
+class DbTest extends Session {
 
 	/**
 	* a database connection resource
@@ -45,7 +46,7 @@ class Nayuda_Session_DbTest extends Nayuda_Session_Abstract {
 		$password = GET_CONFIG("database", "password");
 
         try{
-		    $this->_sessDb = new Nayuda_DB_Manage($dsn, $id, $password);
+		    $this->_sessDb = new \Nayuda\DB\Manage($dsn, $id, $password);
 
         }catch(PDOException $err){
             print $err;
@@ -84,7 +85,8 @@ class Nayuda_Session_DbTest extends Nayuda_Session_Abstract {
                      );
 
 		$record = $this->_sessDb->selectOne("session", "value", array("sesskey"=>$key));
-        if($record["value"]){
+
+        if($record){
             return $this->_sessDb->update("session", $data, "sesskey");
         }else{
             return $this->_sessDb->insert("session", $data);

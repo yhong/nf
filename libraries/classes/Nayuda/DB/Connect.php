@@ -1,24 +1,42 @@
-<?php
-/*
-* DB connection class
-*
-* @author Hong Young Hoon <eric.hong81@gmail.com>;
-* @version 0.2
-* @access public
-* @package DB
-*/
+<?
+/**
+ * Nayuda Framework (http://framework.nayuda.com/)
+ *
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
+ */
+namespace Nayuda\DB;
+use PDO;
 
-class Nayuda_DB_Connect extends Nayuda_Object{
+class Connect extends \Nayuda\Core{
 	
    /**
     * variables of databases
-    * @var string
-    * @see DBConnect()
+    * @var string 
+    * @see Nayuda_DB_Connect::DBConnect()
     */
 	protected $dsn;
+
+    /**
+     * DB Connection object
+     * @access protected
+     * @var string
+     */
 	protected $db_conn;
+
+    /**
+     * @access public
+     * @var string Table Name
+     */
 	protected $tb_name;
+
+    /**
+     * @access public
+     * @var string Whole query statement
+     */
 	protected $query;
+
 	protected $type = array();
 	protected $data = array();
 	protected $order_by;
@@ -26,22 +44,41 @@ class Nayuda_DB_Connect extends Nayuda_Object{
 	protected $arr_field = array();		// table field information
 	protected $setPrepare;
 	
+    /**
+     * @access public
+     * @var string field statement
+     */
 	public $field_kind;
+
+    /**
+     * @access public
+     * @var string value statement
+     */
 	public $value_list;
+
+    /**
+     * @access public
+     * @var string Where statement
+     */
 	public $whereis;  
 	
-	protected $input_query_result;  // DB::result()
+    /**
+     * @access protected
+     * @var string DB::result()
+     */
+	protected $input_query_result; 
 
 
 	/**
-    * connect a datadase
-    *
-    * @author eric hong(eric.hong81@gmail.com)
-    * @param String DSN value
-    * @return nothing
-    * @access public
-    * @see $dsn
-    */
+     * Connect to a datadase
+     *
+     * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+     * @param string $dsn The DSN value of database
+     * @param string $id The user id value of database
+     * @param string $password The password value of database
+     * @access public
+     * @see Nayuda_DB_Connect::$dsn
+     */
 	function __construct($dsn, $id, $password){
 		$this->dsn  = $dsn;
 
@@ -57,61 +94,44 @@ class Nayuda_DB_Connect extends Nayuda_Object{
 	}
 
 	/**
-	 *  
-	 * getConResource()
 	 * return the table name which is setted in config
+     *
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing 
-	 *
-	 * @return $db_conn : connection object
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @return object connection object
+	 */
 	public function getConResource(){
 		return $this->db_conn;
 	}
 	
 	/**
-	 *  
-	 * setDSN()
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $dsn : dsn name
-	 *
-	 * @return nothing
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @param string $dsn DSN name
+	 * @return null
+	 */
 	public function setDSN($dsn){
 		$this->dsn = $dsn;
 
 	}
 	
 	/**
-	 *  
-	 * getDSN()
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing 
-	 *
-	 * @return $dsn : dsn name
-	*/
-	// 
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @param null
+	 * @return string dsn name
+	 */
 	public function getDSN(){
 		return $this->dsn;
 
 	}
 
 	/**
-	 *  
-	 * setTbName()
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $tbname : table name
-	 *
-	 * @return nothing
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @param string $tbname table name
+	 * @return null
+	 */
 	public function setTbName($tbname){
 		$this->type = array();
 		$this->data = array();
@@ -121,31 +141,22 @@ class Nayuda_DB_Connect extends Nayuda_Object{
 	}
 	
 	/**
-	 *  
-	 * getTbName()
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing 
-	 *
-	 * @return $tb_name : table name
-	*/
-	// 
+     *
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @return string table name
+	 */
 	public function getTbName(){
 		return $this->tb_name;
 
 	}
 
 	/**
-	 *  
-	 * addField($field, $value)
-	 * set the field and value
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
+	 * Setup the field and value
+     *
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
 	 * @access public
-	 * @param nothing
-	 * @return nothing
-	*/
+	 */
 	public function addField($field, $value){
 		$this->data = array_merge($this->data, array($field=>$value));
 
@@ -153,17 +164,14 @@ class Nayuda_DB_Connect extends Nayuda_Object{
 	}
 	
 	/**
-	 *  
-	 * addFieldAndType($field, $value, $type)
 	 * set the field and value
-	 * type=>true :string  / type=>true : number
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
+     *
+	 * @example type=>true : string  
+     * @example type=>true : number
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
 	 * @access public
-	 * @param nothing
-	 * @return nothing
-	*/
-	// TODO : drop this function
+	 * @TODO : drop this function
+	 */
 	public function addFieldAndType($field, $value, $type){
 		$this->data = array_merge($this->data, array($field=>$value));
 
@@ -176,21 +184,22 @@ class Nayuda_DB_Connect extends Nayuda_Object{
 	}
 
 	/**
-	 *  
-	 * setField()
-	 * field name ("alias"=>"dbfieldname")
+	 * Setup field name 
+     *
+     * @example "alias"=>"dbfieldname"
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $arrFieldValue : field name(array)
-	 *
-	 * @return nothing
-	*/
-	// 
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @param string[] $arrFieldValue Field name
+	 */
 	public function setField($sFieldValue){
 		$this->field_kind = $sFieldValue;
 	}
 
+	/**
+	 * @access public
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+     * @param string[] $arrValue array of target fields
+	 */
 	public function setFieldAndValue($arrValue){
 		$field_kind = "";
 		$value_list = "";
@@ -252,114 +261,77 @@ class Nayuda_DB_Connect extends Nayuda_Object{
 		$this->setPrepare = true;
 	}
 	
-	
-	
 	public function setType($arrTypeValue){
 		$this->type = $arrTypeValue;
 	}
 	
 	/**
-	 *  
-	 * getField()
-	 * concaterate the column with ','
+	 * Concaterate the column with ','
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing
-	 *
-	 * @return $field_kind : return the field character
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @return string Return the field character
+	 */
 	public function getField(){
 		return $this->field_kind;
 	}
 
 	/**
-	 *  
-	 * setWhere()
-	 * set the filter string
+	 * setup the filter string
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $inputValue : input string
-	 *
-	 * @return $query : 쿼리값
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @param string $inputValue where statement
+	 * @return string Query string
+	 */
 	public function setWhere($sValue){
 		$this->whereis = $sValue;
 	}
 
 	/**
-	 *  
-	 * getWhere()
-	 * return the filter string
-	 * private
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing
-	 *
-	 * @return $this->condition	: concaterate with '`' character
-	*/
+	 * returning the filter string
+	 * @access public
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @return string Concaterated string with '`' character
+	 */
 	public function getWhere(){
 		return $this->whereis;
 	}
 	
-	
 	/**
-	 *  
-	 * setQuery()
-	 * set the query string 
+	 * Setup the query string 
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $value : query string
-	 *
-	 * @return nothing
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @param string $value Query statement
+	 */
 	public function setQuery($value){
 		$this->query = $value;
 	}
 
 	/**
-	 *  
-	 * getQuery()
-	 * return the query string
+	 * returning the query string
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing
-	 *
-	 * @return $query : query string
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @return string Query statement
+	 */
 	public function getQuery(){
 		return $this->query;
 	}
 	
 	/**
-	 *  
-	 * setOrder()
-	 * set the "Order by" 
+	 * Set the "Order by" 
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $value : query string
-	 *
-	 * @return nothing
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @param string $value Query statement
+	 */
 	public function setOrderBy($value){
 		$this->order_by= $value;
 	}
 
 	/**
-	 *  
-	 * getOrder()
-	 * return the "Order by"
+	 * Return the "Order by"
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing
-	 *
-	 * @return $query : query
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @return string order by statement
+	 */
 	public function getOrderBy(){
 		return $this->order_by;
 	}
@@ -374,16 +346,13 @@ class Nayuda_DB_Connect extends Nayuda_Object{
 	}
 	
 	/* 
-	 * exe_query()
-	 * execute query(check the page or list)
-	 *
+	 * Executing query(check the page or list)
 	 * @access private
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $from, $count : start, count
-	 *
-	 * @return nothing
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @param integer $from Start index number
+     * @param integer $count Count rows for listing
+	 * @return null
+	 */
 	public function exe_query($from, $count){
 		if(!$count || $count == 0){
 			$this->executeQuery();
@@ -393,16 +362,10 @@ class Nayuda_DB_Connect extends Nayuda_Object{
 	}
 	
 	/**
-	 * executeQuery()
-	 * execute query
-	 * 
-	 * 
+	 * Executing query
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param void
-	 * @return void
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 */
 	public function executeQuery(){ 
 		try{
 			$this->input_query_result = $this->db_conn->exec($this->query);
@@ -412,49 +375,39 @@ class Nayuda_DB_Connect extends Nayuda_Object{
 		}
 	}
 
-
 	/**
-	 *  
-	 * getQueryResult()
-	 * return the result of query
+	 * Return the result of query
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param void
-	 * @return $input_query_result : the number of the record in query
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 * @return string the number of the record in query
 	*/
 	public function getQueryResult(){ 
 		return $this->input_query_result;
 	}
 
 	/**
-	 *  
-	 * DBClose()
 	 * Return data of row which returned the result of query
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param void
-	 * @return void
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 */
 	public function DBClose(){
 		$this->db_conn->disconnect();
 	}
 	
 	/**
-	 *  
-	 * lastInsertID()
 	 * Get last id which inputed at last time
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param void
-	 * @return void
-	*/
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 */
 	public function lastInsertID(){
 		return $this->db_conn->lastInsertId();
 	}
 	
+	/**
+	 * Setup the limit statement
+	 * @access public
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 */
 	public function setLimit($rows, $offset){
 		if($rows != null && $rows != 0){
 			$rows = ",".$rows;
@@ -462,6 +415,11 @@ class Nayuda_DB_Connect extends Nayuda_Object{
 		$this->limit = $offset.$rows;
 	}
 	
+	/**
+	 * Get the limit statement
+	 * @access public
+	 * @author YoungHoon Hong(Eric.Hong81@nayuda.com)
+	 */
 	public function getLimit(){
 		return $this->limit;
 	}

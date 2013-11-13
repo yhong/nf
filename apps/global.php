@@ -42,13 +42,6 @@ define("IMG_URL", "http://img.nayuda.com");
 define("VAR_ROOT", NAYUDA_ROOT.DS."var");
 if(!is_dir(VAR_ROOT)){
     die("Please make the directory, '".VAR_ROOT."'");
-    /*
-}else{
-    $dir_stat = substr(sprintf("%o", fileperms(VAR_ROOT)), -4);
-    if(substr($dir_stat,1,3) !="777"){
-        die("Please, check the permission(777) of '".VAR_ROOT."'");
-    }
-    */
 }
 
 /**
@@ -115,6 +108,13 @@ define("CONTROLLER_PATH", APP_PATH.DS.CONTROLLER_DIR);
 define("MODEL_DIR", "models");
 define("MODEL_PATH", APP_PATH.DS.MODEL_DIR);
 
+
+/**
+ * helper path
+ */
+define("HELPER_DIR", "helpers");
+define("HELPER_PATH", APP_PATH.DS.HELPER_DIR);
+
 /**
  * view path
  */
@@ -167,7 +167,7 @@ define("TMP_FILE_DIR", "uploads");
 /**
  * file icon path
  */
-define("FILE_ICON_URL", IMG_URL."/file_icon");
+define("FILE_ICON_URL", IMG_URL.DS."file_icon");
 
 //define("TPL_DIR", "template");
 //define("TPL_CONFIG_PATH", NAYUDA_ROOT.DS.CONFIG_DIR.DS.TPL_DIR);
@@ -193,9 +193,9 @@ if(!is_dir(SESSION_PATH)){
 
 $objSession = null;
 if(GET_CONFIG("session", "save_type") == "db"){
-	$objSession = new Nayuda_Session_Db();
+	$objSession = new Nayuda\Session\Db();
 }else{
-	$objSession = new Nayuda_Session_File();
+	$objSession = new Nayuda\Session\File();
 }
 // session start
 

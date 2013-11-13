@@ -1,35 +1,33 @@
 <?php
-/*
-* Managing Database Class
-*
-* @author Hong Young Hoon <eric.hong81@gmail.com>;
-* @version 0.2
-* @access public
-* @package DB
-*/
+/**
+ * Nayuda Framework (http://framework.nayuda.com/)
+ *
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
+ */
 
+namespace Nayuda\DB;
+use PDO;
 
-class Nayuda_DB_Manage extends Nayuda_DB_Connect{   
+class Manage extends \Nayuda\DB\Connect{   
 	
-    // connect db with contruct method
-	function DB_Manage($dsn, $id, $pass){
-		parent::DB_Connect($dsn, $id, $pass);
+    /**
+     * connect db with contruct method
+     */
+	function Manage($dsn, $id, $pass){
+		parent::Connect($dsn, $id, $pass);
 
 	}
 
-
 	/**
-	 *  
-	 * setWhereEQU()
 	 * set condition of query
-	 * private
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $fieldname	: the name of field
-	 * @param $fieldvalue	: the value of field
-	 * @param $isstring		: whether string or not(true : string / false:integer)
-	 *
-	 * @return $whereis		: return field array
-	*/
+	 * @access private
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param string $fieldname	the name of field
+	 * @param string $fieldvalue the value of field
+	 * @param boolean $isstring	whether string or not (true = string / false = integer)
+	 */
 	public function setWhereEQU($fieldname, $fieldvalue, $isstring=true){
 		if($fieldvalue){
 		  if($this->whereis){
@@ -43,21 +41,18 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 		}
 	}
 
-
 	/**
-	 *  
-	 * addSearchEQUField()
-	 * set condition of query
-	 * private
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $fieldname	: the name of field
-	 * @param $fieldvalue	: the value of field
-	 * @param $whereis		: the value of condition
-	 * @param $isstring		: whether string or not(true : string / false:integer)
+	 * Setup condition of query
+     *
+	 * @access protected
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param string $fieldname	the name of field
+	 * @param string $fieldvalue the value of field
+	 * @param string $whereis the value of condition
+	 * @param boolean $isstring	whether string or not(true string / false:integer)
 	 *
-	 * @return $whereis		: return field array
-	*/
+	 * @return array Field array of where statement
+	 */
 	protected function addSearchEQUField($fieldname, $fieldvalue, $whereis, $isstring=true){
 		if($fieldvalue){
 		  if($whereis){
@@ -73,18 +68,15 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 *  
-	 * addSearchALLLIKEField()
-	 * set condition of query(String only)
-	 * private
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $fieldname	: the name of field
-	 * @param $fieldvalue	: the value of field
-	 * @param $whereis		: the value of condition
-	 *
-	 * @return $whereis		: return field array
-	*/
+	 * Setup condition of query(String only)
+     *
+	 * @access private
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param $fieldname	the name of field
+	 * @param $fieldvalue	the value of field
+	 * @param $whereis		the value of condition
+	 * @return array		return field array
+	 */
 	protected function addSearchALLLIKEField($fieldname, $fieldvalue, $whereis){
 		if($fieldvalue){
 		  if($whereis){
@@ -96,18 +88,15 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 *  
-	 * addSearchLIKEField()
 	 * set condition of query(string only)
-	 * private
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $fieldname	: the name of field
-	 * @param $fieldvalue	: the value of field
-	 * @param $whereis		: the value of condition
-	 *
-	 * @return $whereis		: return field array
-	*/
+     *
+	 * @access private
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param $fieldname	the name of field
+	 * @param $fieldvalue	the value of field
+	 * @param $whereis		the value of condition
+	 * @return array Return field array
+	 */
 	protected function addSearchLIKEField($fieldname, $fieldvalue, $whereis){
 		if($fieldvalue){
 		  if($whereis){
@@ -119,18 +108,15 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 *  
-	 * addSearchBETWEENField()
 	 * set condition of query(string only)
-	 * private
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $fieldname	: the name of field
-	 * @param $fieldvalue	: the value of field
-	 * @param $whereis		: the value of condition
-	 *
-	 * @return $whereis		: return field array
-	*/
+     *
+	 * @access private
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param $fieldname	the name of field
+	 * @param $fieldvalue	the value of field
+	 * @param $whereis		the value of condition
+	 * @return array return field array
+	 */
 	protected function addSearchBETWEENField($fieldname, $fieldvalue1, $fieldvalue2, $whereis){
 		if($fieldvalue1 || $fieldvalue2){
 		  if($whereis){
@@ -148,20 +134,19 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 		}
 		return $whereis;
 	}
+
 	/**
-	 *  
-	 * addSearchBETWEENField()
 	 * set condition of query(string only)
-	 * private
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $fieldname	: the name of field
-	 * @param $fieldvalue	: the value of field
-	 * @param $whereis		: the value of condition
-	 * @param $seperator	: the seperator for a date
+     *
+	 * @access private
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param string $fieldname	the name of field
+	 * @param string $fieldvalue	the value of field
+	 * @param string $whereis		the value of condition
+	 * @param string $seperator	the seperator for a date
 	 *
-	 * @return $whereis		: return field array
-	*/
+	 * @return string[]		return field array
+	 */
 	protected function addSearchBETWEENDateField($fieldname, $fieldvalue1, $fieldvalue2, $whereis, $seperator){
 		if($fieldvalue1 || $fieldvalue2){
 		  if($whereis){
@@ -181,19 +166,17 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 *  
-	 * addSearchBETWEENField()
 	 * set condition of query(string only)
-	 * private
+	 * @access private
 	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $fieldname	: the name of field
-	 * @param $fieldvalue	: the value of field
-	 * @param $whereis		: the value of condition
-	 * @param $seperator	: the seperator for a date
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param string $fieldname	the name of field
+	 * @param string $fieldvalue	the value of field
+	 * @param string $whereis		the value of condition
+	 * @param string $seperator	the seperator for a date
 	 *
-	 * @return $whereis		: return field array	
-	*/
+	 * @return array		return field array	
+	 */
 	protected function addSearchBETWEENDate2Field($fieldname1, $fieldvalue1, $fieldname2, $fieldvalue2, $whereis, $seperator){
 		if($fieldvalue1 || $fieldvalue2){
 		  if($whereis){
@@ -213,16 +196,14 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 *  
-	 * searchTypeCheck()
 	 * check part or all in a condition of the query
-	 * private
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $checkValue	: checking the input value whether like or equal
+     *
+	 * @access private
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param string $checkValue	checking the input value whether like or equal
 	 *
-	 * @return 		: bool
-	*/
+	 * @return 	boolean checking the searching type
+	 */
 	private function searchTypeCheck($checkValue){
 		if(substr($checkValue,-1,1) == '%'){
 			return true;
@@ -230,7 +211,14 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 			return false;
 		}
 	}
-
+    /**
+     * searching condition
+     *
+     * @access protected
+     * @author YoungHoon Hong(eric.hong81@gmail.com)
+     *
+     * @return 		boolean
+     */
 	protected function searchLikeorEqu($fieldValue, $value, $whereis, $isString){
 		if($this->searchTypeCheck($value) == true){
 			$value = substr($value, 0, -1);
@@ -243,16 +231,12 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 
 
 	/**
-	 *  
-	 * countRecordRow()
 	 * return the result of query
-	 * public
+	 * @access public
 	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing
-	 *
-	 * @return $result_num : number of record in query
-	*/
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @return $result_num number of record in query
+	 */
 	public function countTotalRecordRow(){
 		if($this->whereis){
 			$cntsql = "select count(*) from ".$this->tb_name." where ".$this->whereis;
@@ -266,16 +250,12 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 *  
-	 * SumRecordRow()
-	 * sum
-	 * public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $field : field name
+	 * @access public
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param string $field field name
 	 *
-	 * @return $result_num : sum of query result
-	*/
+	 * @return $result_num sum of query result
+	 */
 	public function SumRecordRow($field){
 		if($this->whereis){
 			$cntsql = "select SUM(".$field.") from ".$this->tb_name." where ".$this->whereis;
@@ -288,19 +268,14 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 		return $result_num;
 	}
 
-
-
 	/**
-	 *  
 	 * TotalRecordRow()
-	 * result of row 
+	 * Result of row 
+     *
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing
-	 *
-	 * @return $total_num : number of result
-	*/
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @return $total_num number of result
+	 */
 	public function TotalRecordRow(){
 
 		$cntsql = "select count(*) from ".$this->tb_name;
@@ -310,16 +285,14 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 *  
-	 * countConditionRecordRow()
-	 *return a data of count with condition
+	 * Return a data of count with condition
 	 * @access public
 	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param string $whereis where statement
 	 *
-	 * @return $total_num : record number of query
-	*/
+	 * @return integer record number of query
+	 */
 	public function countConditionRecordRow($whereis){
 		if($whereis){
 			$cntsql = "select count(*) from ".$this->tb_name." where ".$whereis;
@@ -333,17 +306,15 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 *  
-	 * countMaxNum()
 	 * return a data of sum with condition
+     *
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $fieldname	
-	 * @param $whereis		
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param string $fieldname	field name
+	 * @param string $whereis where statement
 	 *
-	 * @return $total_num : max value
-	*/
+	 * @return integer max value
+	 */
 	public function countMaxNum($fieldname, $whereis){
 		if($whereis){
 			$cntsql = "select max($fieldname) from ".$this->tb_name." where ".$whereis;
@@ -359,17 +330,15 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 *  
-	 * countMaxNum()
 	 * return a data of sum with condition
+     *
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $fieldname	
-	 * @param $whereis		
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @param string $fieldname	Field name
+	 * @param string $whereis where statement
 	 *
-	 * @return $total_num : max value
-	*/
+	 * @return $total_num max value
+	 */
 	public function countSumNum($fieldname, $whereis){
 		if($whereis){
 			$cntsql = "select sum($fieldname) from ".$this->tb_name." where ".$whereis;
@@ -385,17 +354,15 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 *  
-	 * getFieldValue()
 	 * return a data with condition
+     *
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param $fieldname 
-	 * @param $whereis	
+	 * @author YoungHoon Hong (eric.hong81@gmail.com)
+	 * @param string $fieldname 
+	 * @param string $whereis	
 	 *
-	 * @return $one_value : return value
-	*/
+	 * @return string return value
+	 */
 	public function getFieldValue($fieldname, $whereis){
 		if($whereis){
 			$sql = "select ".$fieldname." from ".$this->tb_name." where ".$whereis;
@@ -413,16 +380,12 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 	
 	/**
-	 *  
-	 * getFieldValue()
 	 * return a data with condition
+     *
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param null
-	 *
-	 * @return $aValue[0] : return value
-	*/
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @return string return a row
+	 */
 	public function getRowValue(){
 		if($this->whereis){
 			$this->query = "select ".$this->field_kind." from ".$this->tb_name." where ".$this->whereis;
@@ -435,18 +398,14 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 		return $value;
 	}
 	
-	
 	/**
-	 *  
 	 * getFieldValues()
 	 * return datas with condition
 	 * @access public
 	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param null
-	 *
-	 * @return $values : return row
-	*/
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @return string return row
+	 */
 	public function getRowValues(){
 		if(!$this->field_kind){
 			$field_kind = "*";
@@ -486,16 +445,12 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 	
 	/**
-	 *  
-	 * countConditionRecordRow()
 	 * return the number which excuted query with the condition
+     *
 	 * @access public
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
-	 * @param nothing
-	 *
-	 * @return $total_num : number of record
-	*/
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
+	 * @return integer number of record
+	 */
 	public function getRowCount(){
 		if($this->whereis){
 			$cntsql = "select count(*) from ".$this->tb_name." where ".$this->whereis;
@@ -510,15 +465,14 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 	
 	/**
-	 * select()
 	 * execute the select query
 	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
 	 * @access public
-	 * @param string $table : table name
-	 * @param array $condition : where part  ex) array(field => value, ...)
-	 * @return bool
-	*/
+	 * @param string $table table name
+	 * @param array $condition where part  ex) array(field => value, ...)
+	 * @return boolean
+	 */
 	public function selectOne($table, $fields, $condition = null){ 
 		try{
 			// making field list
@@ -561,14 +515,14 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 
 	/**
 	 * delete()
+     *
 	 * execute the delete query
-	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
 	 * @access public
-	 * @param string $table : table name
-	 * @param array $condition : where part  ex) array(field => value, ...)
-	 * @return bool
-	*/
+	 * @param string $table table name
+	 * @param array $condition where part  ex) array(field => value, ...)
+	 * @return boolean
+	 */
 	public function delete($table, $condition){ 
 		try{
 			$where = "";
@@ -596,16 +550,15 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 * insert()
 	 * execute the insert query
 	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
 	 * @access public
-	 * @param string $table : table name
-	 * @param array $data : value list  ex) array(field => value, ...)
-	 * @param array $relate_fields : relate field  ex) array(field=>anothoer field, ...)
-	 * @return bool
-	*/
+	 * @param string $table table name
+	 * @param array $data value list  ex) array(field => value, ...)
+	 * @param array $relate_fields relate field  ex) array(field=>anothoer field, ...)
+	 * @return boolean
+	 */
 	public function insert($table, $data, $relate_fields = null){ 
 		$fields = "";
                 $values = "";
@@ -622,8 +575,8 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 			}
 		}
 
-                $fields = substr($fields, 0, -2);
-                $values = substr($values, 0, -2);
+        $fields = substr($fields, 0, -2);
+        $values = substr($values, 0, -2);
 
 		try{
 			$prepare_sql = "insert into ".$table."(".$fields.") values (".$values.")";
@@ -638,16 +591,15 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	
 
 	/**
-	 * update()
 	 * execute the insert query
 	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
 	 * @access public
-	 * @param string $table : table name
-	 * @param array $data : value list  ex) array(field => value, ...)
-	 * @param array $relate_fields : relate field  ex) array(field=>anothoer field, ...)
-	 * @return bool
-	*/
+	 * @param string $table table name
+	 * @param array $data value list  ex) array(field => value, ...)
+	 * @param array $relate_fields relate field ex) array(field=>anothoer field, ...)
+	 * @return boolean
+	 */
 	public function update($table, $data, $primary_key="id", $relate_fields = null){ 
 		$fields = "";
         $values = "";
@@ -682,14 +634,12 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 
 	/**
-	 * insertQuery()
-	 * execute the insert query
+	 * Execute the insert query
 	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
 	 * @access public
-	 * @param nothing
-	 * @return bool
-	*/
+	 * @return boolean
+	 */
 	public function insertQuery(){ 
 		if(!$this->tb_name){
 			die("You should set the name of table!");
@@ -715,15 +665,12 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 	
 	/**
-	 *  
-	 * updateQuery()
 	 * execute the update query
 	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
 	 * @access public
-	 * @param nothing
-	 * @return bool
-	*/
+	 * @return boolean
+	 */
 	public function updateQuery(){ 
 		
 		if(!$this->tb_name){
@@ -749,15 +696,12 @@ class Nayuda_DB_Manage extends Nayuda_DB_Connect{
 	}
 	
 	/**
-	 *  
-	 * deleteQuery()
-	 * execute the delete query
+	 * Execute the delete query
 	 * 
-	 * @author eric hong(eric.hong81@gmail.com)
+	 * @author YoungHoon Hong(eric.hong81@gmail.com)
 	 * @access public
-	 * @param nothing
 	 * @return bool
-	*/
+	 */
 	public function deleteQuery(){ 
 		
 		if(!$this->tb_name){

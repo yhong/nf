@@ -1,54 +1,11 @@
 <?php
 /**
- * Nayuda
+ * Nayuda Framework (http://framework.nayuda.com/)
  *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@nayuda.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Globalnto to newer
- * versions in the future. If you wish to customize Globalnto for your
- * needs please refer to http://framework.nayuda.com for more information.
- *
- * @category   Main
- * @package    Main
- * @copyright  Copyright (c) 2012 Nayuda Inc.
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
  */
-
-/**
- * Loading Libraries
- *
- * using:
- * loadLibrary('Archive/Zip', 'Board/FormList');
- *
- * @param set the library name without '.php'
- */
-//function __autoload($filename){
-function _NAYUDA_AUTOLOADER($filename){
-	$target_chr = array(".", "-", "@", "#", "_");
-	$classname = str_replace($target_chr, DS, $filename);
-	$arrClass = explode(DS, $classname);
-
-	$subPath = "";
-	for($i=0; $i<(count($arrClass) - 1); $i++){
-		$subPath .= $arrClass[$i].DS;	
-	}
-
-	if(file_exists($subPath.'/Abstract.php')){
-		require_once($subPath.'/Abstract.php');
-	}
-	require_once($classname.'.php');
-}
-spl_autoload_register("_NAYUDA_AUTOLOADER");
 
 /**
  * File search if include file is existing
@@ -56,7 +13,7 @@ spl_autoload_register("_NAYUDA_AUTOLOADER");
  * @param string $file file for searching
  * @return bool is there file existing?
  */
- 
+
 function FILE_EXISTS_IN_PATH($file) {
 	$paths = explode(PATH_SEPARATOR, ini_get("include_path"));
 	foreach ($paths as $path) {
@@ -70,6 +27,33 @@ function FILE_EXISTS_IN_PATH($file) {
 	}
 	return false;
 }
+
+spl_autoload_register(
+    function($class){
+        global $TRACKING_FILE;
+
+        $classFile = str_replace("\\", DIRECTORY_SEPARATOR, $class);
+        $classPathInfo = pathinfo($classFile);
+        $classPath = $classPathInfo['dirname'].DIRECTORY_SEPARATOR;
+        
+        $include_file = $classPath.$classPathInfo["filename"].".php";
+        if(!($inc_file = FILE_EXISTS_IN_PATH($include_file))){
+            $include_file = strtolower($classPath.$classPathInfo["filename"]).".php";
+            $inc_file = FILE_EXISTS_IN_PATH($include_file);
+        }
+
+        if (isset($_SERVER['NAYUDA_DEVELOPER_MODE'])) {
+            $TRACKING_FILE .= "Loaded File : ".$classPath.$classPathInfo["filename"].".php<br>";
+        }
+        if(!$inc_file){
+            if (isset($_SERVER['NAYUDA_DEVELOPER_MODE'])) {
+                echo $TRACKING_FILE; 
+                die($include_file." does not exist");
+            }
+        }
+        include_once($inc_file);
+    }
+);
 
 function getModel($model, $alias=null, $config=null){
 
@@ -98,76 +82,107 @@ function getModel($model, $alias=null, $config=null){
 	return null;
 }
 
+
+function getHelper($helper, $alias=null, $config=null){
+	$helperPath = str_replace("_", DS, $helper);
+	$include_file = HELPER_PATH.DS.$helperPath.".php";
+
+    if(!FILE_EXISTS_IN_PATH($include_file)){
+       $include_file = APP_ROOT.DS."base".DS.MAIN_APP_NAME.DS.HELPER_DIR.DS.$helperPath.".php";
+    }
+
+    if(FILE_EXISTS_IN_PATH($include_file)){
+		require_once($include_file);
+		
+		$helperName = "Helper_".$helper;
+		$objHelper = new $helperName($config);
+
+		if($alias){
+			$objHelper->setAlias($alias);
+		}
+		return $objHelper;
+
+	}else{
+        die($include_file." does not exist!");
+    }
+
+	return null;
+}
+
 function STYLE_SHEET($path){
 	return '<link rel="stylesheet" type="text/css" href="'.$path.'.css">'; 
 }
 
 function GET($index = null, $value = null){
-	if(!$index){
+	if(is_null($index)){
 		return $_GET;
 	}else{
-		if(array_key_exists($index, $_GET) && $value == null){
-			if($_GET[$index]){
-				return $_GET[$index];
-			}
-            return null;
-		}else{
-			$_GET[$index] = $value;
-			return $value;
+		if(array_key_exists($index, $_GET)){
+            if(is_null($value)){
+                if($_GET[$index]){
+                    return trim($_GET[$index]);
+                }
+                return null;
+            }
         }
+        $_GET[$index] = trim($value);
+        return $value;
 	}
 }
 
 function POST($index = null, $value = null){
-	if(!$index){
+	if(is_null($index)){
 		return $_POST;
 	}else{
-		if(array_key_exists($index, $_POST) && $value == null){
-			if($_POST[$index]){
-				return $_POST[$index];
-			}
-            return null;
-		}else{
-			$_POST[$index] = $value;
-			return $value;
+		if(array_key_exists($index, $_POST)){
+            if(is_null($value)){
+                if($_POST[$index]){
+                    return trim($_POST[$index]);
+                }
+                return null;
+            }
         }
+        $_POST[$index] = trim($value);
+        return $value;
 	}
 }
 
 function SESSION($index = null, $value = null){
-	if(!$index){
+	if(is_null($index)){
 		return $_SESSION;
 	}else{
-		if(array_key_exists($index, $_SESSION) && $value == null){
-			if($_SESSION[$index]){
-				return $_SESSION[$index];
-			}
-            return null;
-		}else{
-			$_SESSION[$index] = $value;
-			return $value;
+		if(array_key_exists($index, $_SESSION)){
+            if(is_null($value)){
+                if($_SESSION[$index]){
+                    return $_SESSION[$index];
+                }
+                return null;
+             }
         }
+        $_SESSION[$index] = $value;
+        return $value;
 	}
 }
 
 function COOKIE($index = null, $value = null){
-	if(!$index){
+	if(is_null($index)){
 		return $_COOKIE;
 	}else{
-		if(array_key_exists($index, $_COOKIE) && $value == null){
-			if($_COOKIE[$index]){
-				return $_COOKIE[$index];
-			}
-            return null;
-		}else{
-			$_COOKIE[$index] = $value;
-			return $value;
+		if(array_key_exists($index, $_COOKIE)){
+            if(is_null($value)){
+                if($_COOKIE[$index]){
+                    return $_COOKIE[$index];
+                }
+                return null;
+            }
         }
+        $_COOKIE[$index] = $value;
+        return $value;
 	}
 }
 
 function SERVER($index = null){
-	if(!$index){
+	if(is_null($index)){
 		return $_SERVER;
 	}
 	if(array_key_exists($index, $_SERVER)){
@@ -184,12 +199,13 @@ function GO($page, $sec=0){
 	exit;
 }
 
-function ALERT($msg, $back=false){
+function ALERT($msg, $back=false, $code=""){
 	echo "<script>";
     echo "alert('".$msg."');";
     if($back){
         echo "history.back(-1);";
     }
+    echo $code;
     echo "</script>";
 }
 
@@ -200,7 +216,7 @@ function ALERT($msg, $back=false){
  * @return string environment text
  */
 function ENV($key) {
-$server = SERVER();
+    $server = SERVER();
 	if ($key == "HTTPS") {
 		if (SERVER()) {
 			return (SERVER("HTTPS") == "on");
@@ -272,7 +288,6 @@ $server = SERVER();
  *
  * @return float 마이크로 시간
  */
- 
 function GET_MICROTIME() {
 	list($usec, $sec) = explode(" ", microtime());
 	return ((float)$usec + (float)$sec);
@@ -381,7 +396,9 @@ function GET_CONFIG($sCategory, $sAttributeName){
     return "";
 }
 
-// Support multylanguage(LANG_PATH)
+/**
+ * Support multylanguage(LANG_PATH)
+ */
 function I($sId){
 	// [HTTP_ACCEPT_LANGUAGE] => ko-kr,ko;q=0.7,en-us;q=0.3
 	$lang_list = explode(",", $_SERVER['HTTP_ACCEPT_LANGUAGE']);

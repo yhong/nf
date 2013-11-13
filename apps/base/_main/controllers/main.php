@@ -1,6 +1,7 @@
 <?php
+use Nayuda\Core\Controller;
 
-class main_controller extends Nayuda_Controller{
+class main extends Controller{
 	function __construct($arrParam) {
 		 parent::__construct($arrParam);
 		 $this->oTpl->setLayout("default");
@@ -9,9 +10,8 @@ class main_controller extends Nayuda_Controller{
        parent::__destruct();
    	}
 	
-   	
    	public function index(){
-		$this->oTpl->display("main/index");
+		$this->oTpl->setView("main/index");
    	}
 }
 ?>

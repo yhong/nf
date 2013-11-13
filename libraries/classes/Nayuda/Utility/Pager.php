@@ -1,13 +1,15 @@
 <?php
 /**
- * Pager Class 
+ * Nayuda Framework (http://framework.nayuda.com/)
  *
- * @author Hong Young Hoon <eric.hong81@gmail.com>;
- * @version 0.1
- * @access public
- * @package System
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
  */
-class Nayuda_Utility_Pager extends Nayuda_Object{
+namespace Nayuda\Utility;
+use Nayuda\Core;
+
+class Pager extends Core {
 	protected $totalPageNum;	// total page
 	protected $PagePerRow;		// the row number per page
 	protected $limitPagenum;	// page number for display

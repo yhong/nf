@@ -1,14 +1,14 @@
 <?php
-/*
-* File Upload Class
-*
-* @author Hong Young Hoon <eric.hong81@gmail.com>;
-* @version 0.2
-* @access public
-* @package File
-*/
+/**
+ * Nayuda Framework (http://framework.nayuda.com/)
+ *
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
+ */
+namespace Nayuda\File;
 
-class Nayuda_File_Upload extends Nayuda_Object{
+class Upload extends Nayuda\Core{
 	
 	private $mTmpDir;
 	private $mTargetDir;
@@ -24,7 +24,10 @@ class Nayuda_File_Upload extends Nayuda_Object{
 		$this->mLimitFilesPerDir = 100; //the maximum count of files in directory
 	}
 	
-	// sort directory and search the directory which is the most high order of alphabet
+	/**
+     * sort directory and search the directory which is the most high order of alphabet
+     * @access private
+     */
 	private function return_lastdir($file_path){
 	
 			if (is_dir($file_path)){
@@ -49,23 +52,25 @@ class Nayuda_File_Upload extends Nayuda_Object{
 				return false;
 			}					
 		}
-		private function except_special_dir($array_data){
-			$tmp_arr = array(); 
-			if(is_array($array_data)){
-				foreach($array_data as $dir){
-					if($dir != '.' && $dir != '..'){
-						array_push($tmp_arr, $dir);
-					}
+	private function except_special_dir($array_data){
+		$tmp_arr = array(); 
+		if(is_array($array_data)){
+			foreach($array_data as $dir){
+				if($dir != '.' && $dir != '..'){
+					array_push($tmp_arr, $dir);
 				}
-				return $tmp_arr;
-			}else{
-				echo "Except_special_dir: error!";
-				exit;
 			}
-		
+			return $tmp_arr;
+		}else{
+			echo "Except_special_dir: error!";
+			exit;
 		}
+	}
 		
-	// return how many files in current directory
+	/**
+     * return how many files in current directory
+     * @access private
+     */
 	private function return_filecount($file_path){
 			$file_count = 0;
 			foreach(scandir($file_path) as $file) {
@@ -76,7 +81,10 @@ class Nayuda_File_Upload extends Nayuda_Object{
 			return $file_count;
 	}
 		
-	// if there are no path then make it.
+	/**
+     * if there are no path then make it.
+     * @access private
+     */
 	private function mkpath($path){
 			$dirs=array();
 			$path=preg_replace('/(\/){2,}|(\\\){1,}/','/',$path);
@@ -128,7 +136,10 @@ class Nayuda_File_Upload extends Nayuda_Object{
 		}
 	}
 	
-	// if $ext is false, then return the value without file extension
+	/**
+     * if $ext is false, then return the value without file extension
+     * @access public
+     */
 	public function getFilename($ext = false){
 		if(count($this->mArrFile)<2){
 			die("Upload the normal file, please!");
@@ -141,7 +152,10 @@ class Nayuda_File_Upload extends Nayuda_Object{
 		}
 	}
 	
-	// if $ext is false, then return the value without file extension
+	/**
+     * if $ext is false, then return the value without file extension
+     * @access public
+     */
 	public function getFilenameWithCrypt($ext = false){
 		if(count($this->mArrFile)<2){
 			die("Upload the normal file, please!");

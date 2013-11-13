@@ -1,19 +1,19 @@
 <?php
-/*
-* session
-*
-* @author Hong Young Hoon <eric.hong81@gmail.com>;
-* @version 0.2
-* @access public
-* @package AUTH
-*/
+/**
+ * Nayuda Framework (http://framework.nayuda.com/)
+ *
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
+ */
+namespace Nayuda\Session;
+use Nayuda\Session;
 
-class Nayuda_Session_Db extends Nayuda_Session_Abstract {
-
+class Db extends Session {
 	/**
-	* a database connection resource
-	* @var resource
-	*/
+	 * a database connection resource
+	 * @var resource
+	 */
 	private $_sessDb;
 	private $_sessDbConn;
 	
@@ -36,45 +36,45 @@ class Nayuda_Session_Db extends Nayuda_Session_Abstract {
 	}
 
 	/**
-	* Open the session
-	* @return bool
-	*/
+	 * Open the session
+	 * @return bool
+	 */
 	public function open() {
 		$dsn = GET_CONFIG("database", "dsn");
 		$id = GET_CONFIG("database", "id");
 		$password = GET_CONFIG("database", "password");
 
         try{
-		    $this->_sessDb = new Nayuda_DB_Manage($dsn, $id, $password);
+		    $this->_sessDb = new \Nayuda\DB\Manage($dsn, $id, $password);
 
-        }catch(PDOException $err){
+        }catch(Exception $err){
             print $err;
 		}
 	}
 
 	/**
-	* Close the session
-	* @return bool
-	*/
+	 * Close the session
+	 * @return bool
+	 */
 	public function close() {
 		return $this->_sessDb = null;
 	}
 
 	/**
-	* Read the session
-	* @param int session id
-	* @return string string of the sessoin
-	*/
+	 * Read the session
+	 * @param int session id
+	 * @return string string of the sessoin
+	 */
 	public function read($key) {
 		$record = $this->_sessDb->selectOne("session", "value", array("sesskey"=>$key));
 		return $record["value"];
 	}
 
 	/**
-	* Write the session
-	* @param int session id
-	* @param string data of the session
-	*/
+	 * Write the session
+	 * @param int session id
+	 * @param string data of the session
+	 */
 	public function write($key, $sessData) {
 		$data = array("sesskey"=>$key, 
                       "expire"=>$this->cookieTime, 
@@ -83,7 +83,7 @@ class Nayuda_Session_Db extends Nayuda_Session_Abstract {
                      );
 
 		$record = $this->_sessDb->selectOne("session", "value", array("sesskey"=>$key));
-        if($record["value"]){
+        if($record){
             return $this->_sessDb->update("session", $data, "sesskey");
         }else{
             return $this->_sessDb->insert("session", $data);
@@ -91,24 +91,24 @@ class Nayuda_Session_Db extends Nayuda_Session_Abstract {
 	}
 
 	/**
-	* Destoroy the session
-	* @param int session id
-	* @return bool
-	*/
+	 * Destoroy the session
+	 * @param int session id
+	 * @return bool
+	 */
 	public function destroy($key) {
 		return $this->_sessDb->delete("session", array("sesskey"=>$key));
 	}
 
 	/**
-	* Garbage Collector
-	* @param int life time (sec.)
-	* @return bool
-	* @see session.gc_divisor      100
-	* @see session.gc_maxlifetime 1440
-	* @see session.gc_probability    1
-	* @usage execution rate 1/100
-	*        (session.gc_probability/session.gc_divisor)
-	*/
+	 * Garbage Collector
+	 * @param int life time (sec.)
+	 * @return bool
+	 * @see session.gc_divisor      100
+	 * @see session.gc_maxlifetime 1440
+	 * @see session.gc_probability    1
+	 * @usage execution rate 1/100
+	 *        (session.gc_probability/session.gc_divisor)
+	 */
 	public function gc($max) {
 		return $this->_sessDb->delete("session", 
 			array("expire" => array("<", ($this->cookieTime - $max)))

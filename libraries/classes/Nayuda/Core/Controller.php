@@ -1,6 +1,19 @@
 <?php
-// gloval Controller
-class Nayuda_Controller extends Nayuda_Object{
+/**
+ * Nayuda Framework (http://framework.nayuda.com/)
+ *
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
+ */
+namespace Nayuda\Core;
+
+use Nayuda\DB\Manage;
+use Nayuda\Template\Smarty;
+use Nayuda\Auth\Login;
+use Nayuda\Core;
+
+class Controller extends Core {
 	protected $oDb = null; 		// DB object variable
 	protected $oDbConn = null; 	// DB member object variable
 	protected $oTpl = null; 	// DB template object variable
@@ -20,7 +33,7 @@ class Nayuda_Controller extends Nayuda_Object{
 		$password = GET_CONFIG("database", "password");
 
         try{
-		    $this->oDb = new Nayuda_DB_Manage($dsn, $id, $password);
+		    $this->oDb = new Manage($dsn, $id, $password);
 		    $this->oDbConn = $this->oDb->getConResource();
 
         }catch(PDOException $err){
@@ -30,13 +43,18 @@ class Nayuda_Controller extends Nayuda_Object{
 
 	protected function setTemplate($arrParam){
 		// Template Object (loading by singleton)
-		$this->oTpl = Nayuda_Template_Smarty::getInstance();
-		//$this->oTpl = new Nayuda_Template_Smarty();
+		$this->oTpl = Smarty::getInstance();
 		$this->oTpl->setLayout("blank");
 
         $this->oTpl->assign("MAIN_DOMAIN", MAIN_DOMAIN);
-        $this->oTpl->assign("PEOPLE_ID", SESSION("auth_people_id"));
-        $this->oTpl->assign("FULL_NAME", SESSION("auth_fullname"));
+
+        if(SESSION()){
+            $this->oTpl->assign("PEOPLE_ID", SESSION("auth_people_id"));
+            $this->oTpl->assign("FULL_NAME", SESSION("auth_fullname"));
+        }else{
+            $this->oTpl->assign("PEOPLE_ID", "");
+            $this->oTpl->assign("FULL_NAME", "");
+        }
 
 		$this->oTpl->assign("JS", JS_URL);
 		$this->oTpl->assign("CSS", CSS_URL);
@@ -60,11 +78,11 @@ class Nayuda_Controller extends Nayuda_Object{
 
 	protected function setAuth(){
 		// login object
-		$this->oLogin = new Nayuda_Auth_Login("user");
+		$this->oLogin = new Login("user");
 	}
 	
 	public function __destruct() {
-       		// disconnect from the DB
+       	// disconnect from the DB
 		$this->oDbConn = null;
    	}
 }
