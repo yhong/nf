@@ -121,7 +121,7 @@ class Pager extends Core {
 			}else{
 				$printPageNumber=$i;
 			}
-			$mainPageView .= "<li><a href=".$link."Page=".$i."&PageG=".$this->PageG.">".$printPageNumber."</a></li>";
+			$mainPageView .= "<span class='page-item'><a href=".$link."Page=".$i."&PageG=".$this->PageG.">".$printPageNumber."</a></span>";
 		}
 		return $mainPageView;
 	}
@@ -177,7 +177,7 @@ class Pager extends Core {
 			echo "";
 		}else{
 			$nextpage = ($this->PageG) * $this->limitPagenum+1;
-			$nextPageView = "<li><a href=".$link."Page=".$nextpage."&PageG=".($this->PageG+1).">".$this->iterNextPage."</a></li>";
+			$nextPageView = "<span class='page-item'><a href=".$link."Page=".$nextpage."&PageG=".($this->PageG+1).">".$this->iterNextPage."</a></span>";
 		
 			return $nextPageView;
 		}
@@ -226,7 +226,7 @@ class Pager extends Core {
 				$prevpage=($this->PageG-2) * $this->limitPagenum+1;
 			}
 		
-		$prevPageView = "<li><a href=".$link."&Page=".$prevpage."&PageG=".($this->PageG-1).">".$this->iterPrevPage."</a><li>";
+		$prevPageView = "<span class='page-item'><a href=".$link."&Page=".$prevpage."&PageG=".($this->PageG-1).">".$this->iterPrevPage."</a><span>";
 		
 		return $prevPageView;
 		}

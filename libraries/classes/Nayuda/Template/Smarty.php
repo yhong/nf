@@ -9,8 +9,8 @@
 namespace Nayuda\Template;
 
 global $paths;
-$paths[]="/var/www/nayuda/libraries/exts/smarty/sysplugins";
-$paths[]="/var/www/nayuda/libraries/exts/smarty/plugins";
+$paths[] = LIB_PATH.DS.EXT_DIR.DS."smarty".DS."sysplugins";
+$paths[] = LIB_PATH.DS.EXT_DIR.DS."smarty".DS."/plugins";
 set_include_path(implode(PS, $paths));
 
 class Smarty extends \Smarty{
@@ -41,8 +41,8 @@ class Smarty extends \Smarty{
 
 		$this->setPluginsDir(
             array(
-                "/var/www/nayuda/libraries/exts/smarty/plugins", 
-                "/var/www/nayuda/libraries/exts/smarty/sysplugins", 
+                LIB_PATH.DS.EXT_DIR.DS."smarty".DS."plugins", 
+                LIB_PATH.DS.EXT_DIR.DS."smarty".DS."sysplugins", 
                 NAYUDA_ROOT.DS.GET_CONFIG("template", "plugin")
             )
         );
@@ -91,15 +91,15 @@ class Smarty extends \Smarty{
     public function blockFetch($fileName){
         $sBlockFile = $this->getTplPath(TPL_BLOCK_PATH, TPL_BLOCK_DIR, $fileName);
 
-        $sCacheId = SERVER("SERVER_NAME")."_".SERVER("REQUEST_URI");
-        $sCompileId = SERVER("SERVER_NAME")."_".SERVER("REQUEST_URI");
+        $sCacheId = SERVER("SERVER_NAME")."_".SERVER("REDIRECT_URL");
+        $sCompileId = SERVER("SERVER_NAME")."_".SERVER("REDIRECT_URL");
 
         return $this->fetch($sBlockFile, $sCacheId, $sCompileId);
     }
 
     public function errorDisplay($tpl_name){
-        $sCacheId = SERVER("SERVER_NAME")."_".SERVER("REQUEST_URI");
-        $sCompileId = SERVER("SERVER_NAME")."_".SERVER("REQUEST_URI");
+        $sCacheId = SERVER("SERVER_NAME")."_".SERVER("REDIRECT_URL");
+        $sCompileId = SERVER("SERVER_NAME")."_".SERVER("REDIRECT_URL");
 
         $sErrorFile = $this->getTplPath(TPL_ERROR_PATH, TPL_ERROR_DIR, $fileName);
 		$sContentOutput = $this->fetch("file:".$sErrorFile, $sCacheId, $sCompileId);
@@ -108,10 +108,17 @@ class Smarty extends \Smarty{
         $this->setDisplay($this->mLayoutName, $sCacheId, $sCompileId);
     }
 
+    public function getTpl($tpl_name){
+        $sCacheId = md5(SERVER("SERVER_NAME")."_".SERVER("REDIRECT_URL"));
+        $sCompileId = md5(SERVER("SERVER_NAME")."_".SERVER("REDIRECT_URL"));
+
+		return $this->fetch($tpl_name.'.'.$this->mTplExt, $sCacheId, $sCompileId);
+    }
+
 	// Display for layout
 	public function setView($tpl_name){
-        $sCacheId = md5(SERVER("SERVER_NAME")."_".SERVER("REQUEST_URI"));
-        $sCompileId = md5(SERVER("SERVER_NAME")."_".SERVER("REQUEST_URI"));
+        $sCacheId = md5(SERVER("SERVER_NAME")."_".SERVER("REDIRECT_URL"));
+        $sCompileId = md5(SERVER("SERVER_NAME")."_".SERVER("REDIRECT_URL"));
 
 		$tpl = $this->fetch($tpl_name.'.'.$this->mTplExt, $sCacheId, $sCompileId);
 
@@ -125,6 +132,25 @@ class Smarty extends \Smarty{
 		}
 
 		$this->display($this->mLayoutName, $sCacheId, $sCompileId);
+	}
+
+	// Display for layout
+	public function getView($tpl_name){
+        $sCacheId = md5(SERVER("SERVER_NAME")."_".SERVER("REDIRECT_URL"));
+        $sCompileId = md5(SERVER("SERVER_NAME")."_".SERVER("REDIRECT_URL"));
+
+		$tpl = $this->fetch($tpl_name.'.'.$this->mTplExt, $sCacheId, $sCompileId);
+
+		if($this->mSubLayoutName){
+			$this->assign("SUB_CONTENTS", $tpl);
+
+			$stpl = $this->fetch($this->mSubLayoutName);
+			$this->assign("MAIN_CONTENTS", $sTpl);
+		}else{
+			$this->assign("MAIN_CONTENTS", $tpl);
+		}
+
+		return $this->fetch($this->mLayoutName);
 	}
 }
 ?>

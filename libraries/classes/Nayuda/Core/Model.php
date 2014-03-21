@@ -467,7 +467,11 @@ class Model extends Core{
 	 * @return $values : return count
 	*/
 	public function getTotalCount(){
-		$this->_query = "select count(*) from ".$this->_name.' '.$this->_alias.' '.$this->_join;
+        $where = "";
+        if($this->_where){
+            $where = " where ".$this->_where;
+        }
+		$this->_query = "select count(*) from ".$this->_name.' '.$this->_alias.' '.$this->_join.' '.$where;
 
 		try{
 			$pResult = $this->_dbConn->prepare($this->_query);

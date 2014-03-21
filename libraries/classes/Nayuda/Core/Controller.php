@@ -46,7 +46,7 @@ class Controller extends Core {
 		$this->oTpl = Smarty::getInstance();
 		$this->oTpl->setLayout("blank");
 
-        $this->oTpl->assign("MAIN_DOMAIN", MAIN_DOMAIN);
+        $this->oTpl->assign("MAIN_DOMAIN", GET_CONFIG("site", "domain"));
 
         if(SESSION()){
             $this->oTpl->assign("PEOPLE_ID", SESSION("auth_people_id"));

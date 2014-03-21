@@ -113,13 +113,23 @@ function STYLE_SHEET($path){
 	return '<link rel="stylesheet" type="text/css" href="'.$path.'.css">'; 
 }
 
+function REQUEST($index){
+    if(POST($index)){
+        return POST($index);
+    }else{
+        return GET($index);
+    }
+}
+
 function GET($index = null, $value = null){
 	if(is_null($index)){
 		return $_GET;
 	}else{
 		if(array_key_exists($index, $_GET)){
             if(is_null($value)){
-                if($_GET[$index]){
+                if(is_array($_GET[$index])){
+                    return $_GET[$index];
+                }else{
                     return trim($_GET[$index]);
                 }
                 return null;
@@ -136,8 +146,12 @@ function POST($index = null, $value = null){
 	}else{
 		if(array_key_exists($index, $_POST)){
             if(is_null($value)){
-                if($_POST[$index]){
-                    return trim($_POST[$index]);
+                if($_POST[$index] || $_POST[$index] == 0){
+                    if(is_array($_POST[$index])){
+                        return $_POST[$index];
+                    }else{
+                        return trim($_POST[$index]);
+                    }
                 }
                 return null;
             }
@@ -153,7 +167,7 @@ function SESSION($index = null, $value = null){
 	}else{
 		if(array_key_exists($index, $_SESSION)){
             if(is_null($value)){
-                if($_SESSION[$index]){
+                if($_SESSION[$index] || $_SESSION[$index] == 0){
                     return $_SESSION[$index];
                 }
                 return null;
@@ -170,7 +184,7 @@ function COOKIE($index = null, $value = null){
 	}else{
 		if(array_key_exists($index, $_COOKIE)){
             if(is_null($value)){
-                if($_COOKIE[$index]){
+                if($_COOKIE[$index] || $_COOKIE[$index] == 0){
                     return $_COOKIE[$index];
                 }
                 return null;
@@ -186,7 +200,7 @@ function SERVER($index = null){
 		return $_SERVER;
 	}
 	if(array_key_exists($index, $_SERVER)){
-		if($_SERVER[$index]){
+		if($_SERVER[$index] || $_SERVER[$index] == 0){
 			return $_SERVER[$index];
 		}
 	}else{
