@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf8' standalone='yes' ?>
+<config>
+	<site>
+		<element name="title" value="Nayuda" />
+		<element name="domain" value="www.nayuda.com" />
+		<element name="page_per_row" value="20" />
+		<element name="limit_page_num" value="2" />
+	</site>
+	<company>
+		<element name="name" value="" />
+		<element name="description" value="Nayuda Web Framework" />
+	</company>
+	<database>
+	        <element name="dsn" value="mysql:host=[DB HOST];dbname=[DB NAME]" />
+	        <element name="id" value="[DB ID]" />
+	        <element name="password" value="[DB PASSWORD]" />
+	</database>
+    <template>
+            <element name="config" value="config/template" />
+            <element name="plugin" value="config/template/plugins" />
+            <element name="ext" value="thtm" />
+    </template>
+	<session>
+		<element name="log_login" value="on" />
+		<element name="salt" value="nayuda" />
+		<element name="name" value="nayuda_sessid" />
+		<element name="tmp_path" value="var/tmp/session" />
+		<element name="member_table" value="peoples" />
+		<element name="security" value="low" />
+		<!-- db / file -->
+		<element name="save_type" value="file" />
+	</session>
+	<language>
+		<element name="type" value="en" />
+	</language>
+</config>
