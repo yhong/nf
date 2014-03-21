@@ -1,22 +1,21 @@
 <?php
-/*
-* Page load Class 
-*
-* @author Hong Young Hoon <eric.hong81@gmail.com>;
-* @version 0.2
-* @access public
-* @package System
-*/
+/**
+ * Nayuda Framework (http://framework.nayuda.com/)
+ *
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
+ */
+namespace Nayuda\System;
+use Nayuda\Core;
 
-class Nayuda_System_Loader extends Nayuda_Object{
+class Loader extends Core{
 	/**
 	 * basic URL
 	 *
 	 * @var string
 	 * @access public
 	 */
-	public $controllerPostfix= "controller";
-
 	public function __construct($url = null) {
 		// fix the basic value with index
         $arrParam = array();
@@ -29,23 +28,27 @@ class Nayuda_System_Loader extends Nayuda_Object{
         }
 
         $path = "";
+        $include_path = "";
+        $include_file = "";
         foreach($arrUrl as $idx=>$item){
             $path .= $item;
-            $include_file = CONTROLLER_PATH.DS.$path."_".$this->controllerPostfix.".php";
-            if(FILE_EXISTS_IN_PATH($include_file)){
-                require_once($include_file);
+            $include_path = CONTROLLER_PATH.DS.$path;
+
+            if(FILE_EXISTS_IN_PATH($include_path.".php")){
+                $include_file = $include_path.".php";
+                include_once($include_file);
                 break;
             }else{
                 $path .= DS;
             }
         }
+
         if(substr($path, -2)  == '//'){
             $path = substr($path, 0, -1);
         }
 
-
-        if(!FILE_EXISTS_IN_PATH($include_file)){
-            $_include_file = CONTROLLER_PATH.DS.$path."index_".$this->controllerPostfix.".php";
+        if(!$include_file){
+            $_include_file = $include_path.DS."index.php";
             
             if(FILE_EXISTS_IN_PATH($_include_file)){
                 $arrParam["controller"] = "index";
@@ -68,10 +71,10 @@ class Nayuda_System_Loader extends Nayuda_Object{
                 $arrParam["action"] = "index";
             }
         }
-        $arrParam["controller.class"] = $arrParam["controller"]."_".$this->controllerPostfix;
+        $arrParam["controller.class"] = $arrParam["controller"];
         $arrParam["controller.file"] = $arrParam["controller.class"].".php";
 
-		$include_file = CONTROLLER_PATH.DS.$path."_".$this->controllerPostfix.".php";
+		$include_file = CONTROLLER_PATH.DS.$path.".php";
 
         // loading super class (if it exists)
 		$_include_file = CONTROLLER_PATH.DS."controller.php";

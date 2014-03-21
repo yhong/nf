@@ -1,13 +1,15 @@
 <?php
-/*
-* session
-*
-* @author Hong Young Hoon <eric.hong81@gmail.com>;
-* @version 0.2
-* @access public
-* @package AUTH
-*/
-class Nayuda_Session_File extends Nayuda_Session_Abstract {
+/**
+ * Nayuda Framework (http://framework.nayuda.com/)
+ *
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
+ */
+namespace Nayuda\Session;
+use Nayuda\Session;
+
+class File extends Session {
 
 	private $_sessName;
 	private $_sessPath;
@@ -36,9 +38,9 @@ class Nayuda_Session_File extends Nayuda_Session_Abstract {
 	}
 
 	/**
-	* Open the session
-	* @return bool
-	*/
+	 * Open the session
+	 * @return bool
+	 */
 	public function open($save_path = null, $session_name = null) {
 		if(!$this->_sessName){
 			$this->_sessName = $save_path; 
@@ -52,9 +54,9 @@ class Nayuda_Session_File extends Nayuda_Session_Abstract {
 	}
 
 	/**
-	* Close the session
-	* @return bool
-	*/
+	 * Close the session
+	 * @return bool
+	 */
 	public function close() {
 		flock($this->_sessFp, LOCK_UN);
 		fclose($this->_sessFp);
@@ -64,10 +66,10 @@ class Nayuda_Session_File extends Nayuda_Session_Abstract {
 	}
 
 	/**
-	* Read the session
-	* @param int session id
-	* @return string string of the sessoin
-	*/
+	 * Read the session
+	 * @param int session id
+	 * @return string string of the sessoin
+	 */
 	public function read($key) {
 		$sess_file = $this->_sessPath."/sess_".$key;
 
@@ -93,10 +95,10 @@ class Nayuda_Session_File extends Nayuda_Session_Abstract {
 	}
 
 	/**
-	* Write the session
-	* @param int session id
-	* @param string data of the session
-	*/
+	 * Write the session
+	 * @param int session id
+	 * @param string data of the session
+	 */
 	public function write($key, $data) {
 		$sess_file = $this->_sessPath."/sess_".$key;
 
@@ -114,25 +116,25 @@ class Nayuda_Session_File extends Nayuda_Session_Abstract {
 	}
 
 	/**
-	* Destoroy the session
-	* @param int session id
-	* @return bool
-	*/
+	 * Destoroy the session
+	 * @param int session id
+	 * @return bool
+	 */
 	public function destroy($key) {
 		$sess_file = $this->_sessPath."/sess_".$key;
 		return(@unlink($sess_file)); 
 	}
 
 	/**
-	* Garbage Collector
-	* @param int life time (sec.)
-	* @return bool
-	* @see session.gc_divisor      100
-	* @see session.gc_maxlifetime 1440
-	* @see session.gc_probability    1
-	* @usage execution rate 1/100
-	*        (session.gc_probability/session.gc_divisor)
-	*/
+	 * Garbage Collector
+	 * @param int life time (sec.)
+	 * @return bool
+	 * @see session.gc_divisor      100
+	 * @see session.gc_maxlifetime 1440
+	 * @see session.gc_probability    1
+	 * @usage execution rate 1/100
+	 *        (session.gc_probability/session.gc_divisor)
+	 */
 	public function gc($max) {
 		foreach (glob($this->_sessPath."/sess_*") as $filename) {
 			if (filemtime($filename) + $maxlifetime < time()) {

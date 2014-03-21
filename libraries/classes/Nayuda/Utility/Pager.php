@@ -1,13 +1,15 @@
 <?php
 /**
- * Pager Class 
+ * Nayuda Framework (http://framework.nayuda.com/)
  *
- * @author Hong Young Hoon <eric.hong81@gmail.com>;
- * @version 0.1
- * @access public
- * @package System
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
  */
-class Nayuda_Utility_Pager extends Nayuda_Object{
+namespace Nayuda\Utility;
+use Nayuda\Core;
+
+class Pager extends Core {
 	protected $totalPageNum;	// total page
 	protected $PagePerRow;		// the row number per page
 	protected $limitPagenum;	// page number for display
@@ -119,7 +121,7 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 			}else{
 				$printPageNumber=$i;
 			}
-			$mainPageView .= "<li><a href=".$link."Page=".$i."&PageG=".$this->PageG.">".$printPageNumber."</a></li>";
+			$mainPageView .= "<span class='page-item'><a href=".$link."Page=".$i."&PageG=".$this->PageG.">".$printPageNumber."</a></span>";
 		}
 		return $mainPageView;
 	}
@@ -175,7 +177,7 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 			echo "";
 		}else{
 			$nextpage = ($this->PageG) * $this->limitPagenum+1;
-			$nextPageView = "<li><a href=".$link."Page=".$nextpage."&PageG=".($this->PageG+1).">".$this->iterNextPage."</a></li>";
+			$nextPageView = "<span class='page-item'><a href=".$link."Page=".$nextpage."&PageG=".($this->PageG+1).">".$this->iterNextPage."</a></span>";
 		
 			return $nextPageView;
 		}
@@ -224,7 +226,7 @@ class Nayuda_Utility_Pager extends Nayuda_Object{
 				$prevpage=($this->PageG-2) * $this->limitPagenum+1;
 			}
 		
-		$prevPageView = "<li><a href=".$link."&Page=".$prevpage."&PageG=".($this->PageG-1).">".$this->iterPrevPage."</a><li>";
+		$prevPageView = "<span class='page-item'><a href=".$link."&Page=".$prevpage."&PageG=".($this->PageG-1).">".$this->iterPrevPage."</a><span>";
 		
 		return $prevPageView;
 		}

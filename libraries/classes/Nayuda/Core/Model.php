@@ -1,6 +1,16 @@
 <?php
-// gloval Controller
-class Nayuda_Model extends Nayuda_Object{
+/**
+ * Nayuda Framework (http://framework.nayuda.com/)
+ *
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
+ */
+namespace Nayuda\Core;
+use Nayuda\Core;
+use PDO;
+
+class Model extends Core{
 	protected $_oDb     = null; // DB object variable
 	protected $_dbConn  = null; // DB member object variable
 	protected $_name    = null;	// table name
@@ -39,7 +49,6 @@ class Nayuda_Model extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * getConResource()
 	 * return the table name which is setted in config
 	 * @access public
@@ -54,7 +63,6 @@ class Nayuda_Model extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * setTableName()
 	 * @access public
 	 * 
@@ -70,7 +78,6 @@ class Nayuda_Model extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * setAlias()
 	 * @access public
 	 * 
@@ -126,6 +133,7 @@ class Nayuda_Model extends Nayuda_Object{
 
 		return $this;
 	}
+
 	/**
 	 *  
 	 * setWhere()
@@ -150,8 +158,8 @@ class Nayuda_Model extends Nayuda_Object{
 
 		return $this;
 	}
+
 	/**
-	 *  
 	 * setField()
 	 * field name ("alias"=>"dbfieldname")
 	 * @access public
@@ -178,7 +186,6 @@ class Nayuda_Model extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * setLimit()
 	 * @access public
 	 * 
@@ -224,7 +231,6 @@ class Nayuda_Model extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * getQuery()
 	 * return the query string
 	 * @access public
@@ -239,7 +245,6 @@ class Nayuda_Model extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * select()
 	 * @access public
 	 * 
@@ -314,7 +319,6 @@ class Nayuda_Model extends Nayuda_Object{
 
 
 	/**
-	 *  
 	 * insert()
 	 * @access public
 	 * 
@@ -353,7 +357,6 @@ class Nayuda_Model extends Nayuda_Object{
 
 
 	/**
-	 *  
 	 * update()
 	 * @access public
 	 * 
@@ -397,7 +400,6 @@ class Nayuda_Model extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * delete()
 	 * @access public
 	 * 
@@ -427,7 +429,6 @@ class Nayuda_Model extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * getCount()
 	 * @access public
 	 * 
@@ -457,7 +458,6 @@ class Nayuda_Model extends Nayuda_Object{
 	}
 
 	/**
-	 *  
 	 * getTotalCount()
 	 * @access public
 	 * 
@@ -467,7 +467,11 @@ class Nayuda_Model extends Nayuda_Object{
 	 * @return $values : return count
 	*/
 	public function getTotalCount(){
-		$this->_query = "select count(*) from ".$this->_name.' '.$this->_alias.' '.$this->_join;
+        $where = "";
+        if($this->_where){
+            $where = " where ".$this->_where;
+        }
+		$this->_query = "select count(*) from ".$this->_name.' '.$this->_alias.' '.$this->_join.' '.$where;
 
 		try{
 			$pResult = $this->_dbConn->prepare($this->_query);
@@ -487,6 +491,8 @@ class Nayuda_Model extends Nayuda_Object{
 			->setOrder('')
 			->setWhere(null)
 			->setField("");
+        $this->_join = "";
+        $this->_isJoin = false;
 	}
 
 	public function setJoin($key, $objModel, $target_key=null, $type=null){

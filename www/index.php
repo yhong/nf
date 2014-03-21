@@ -87,5 +87,5 @@ if (!file_exists($globalFile)) {
 require_once $globalFile;
 
 // Loader
-new Nayuda_System_Loader(GET("url"));
+new Nayuda\System\Loader(GET("url"));
 ?>

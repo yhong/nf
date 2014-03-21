@@ -1,14 +1,15 @@
 <?php
-/*
-* session
-*
-* @author Hong Young Hoon <eric.hong81@gmail.com>;
-* @version 0.2
-* @access public
-* @package AUTH
-*/
+/**
+ * Nayuda Framework (http://framework.nayuda.com/)
+ *
+ * @link    https://github.com/yhong/nf for the canonical source repository
+ * @copyright Copyright (c) 2003-2013 Nayuda Inc. (http://www.nayuda.com)
+ * @license http://framework.nayuda.com/license/new-bsd New BSD License
+ */
 
-abstract class Nayuda_Session_Abstract extends Nayuda_Object {
+namespace Nayuda;
+
+abstract class Session extends Core {
 
 	protected $host;
 	protected $cookieTime;
