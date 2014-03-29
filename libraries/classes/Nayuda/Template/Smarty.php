@@ -10,7 +10,7 @@ namespace Nayuda\Template;
 
 global $paths;
 $paths[] = LIB_PATH.DS.EXT_DIR.DS."smarty".DS."sysplugins";
-$paths[] = LIB_PATH.DS.EXT_DIR.DS."smarty".DS."/plugins";
+$paths[] = LIB_PATH.DS.EXT_DIR.DS."smarty".DS."plugins";
 set_include_path(implode(PS, $paths));
 
 class Smarty extends \Smarty{
