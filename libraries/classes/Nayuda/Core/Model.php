@@ -471,7 +471,14 @@ class Model extends Core{
         if($this->_where){
             $where = " where ".$this->_where;
         }
-		$this->_query = "select count(*) from ".$this->_name.' '.$this->_alias.' '.$this->_join.' '.$where;
+
+        $cntField = "";
+        if($this->_group){
+            $cntField = "count(distinct ".$this->_group.")";
+        }else{
+            $cntField = "count(*)";
+        }
+        $this->_query = "select ".$cntField." from ".$this->_name.' '.$this->_alias.' '.$this->_join.' '.$where;
 
 		try{
 			$pResult = $this->_dbConn->prepare($this->_query);
