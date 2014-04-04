@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Nayuda Framework (http://framework.nayuda.com/)
  *
