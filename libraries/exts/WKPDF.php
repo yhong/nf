@@ -199,8 +199,8 @@
                         $this->pdf=self::_pipeExec(
                                 '/usr/bin/xvfb-run -a -s "-screen 0, 1024x680x24" '.$this->cmd.' -q'
                                // .(($this->copies>1)?' --copies '.$this->copies:'')                              // number of copies
-                                .' --zoom 1.5'                                                                // zoom
-                                .' --margin-bottom 30'  
+                                .' --zoom 2.5'                                                                // zoom
+                                .' --margin-bottom 19.8'  
                                 .' --orientation '.$this->orient                                                                // orientation
                                 .' --page-size '.$this->size                                                                    // page size
                                // .($this->toc?' --toc':'')                                                                               // table of contents
@@ -213,11 +213,6 @@
                         if(((int)$this->pdf['return'])>1)throw new Exception('WKPDF shell error, return code '.(int)$this->pdf['return'].'.');
                         $this->status=$this->pdf['stderr'];
                         $this->pdf=$this->pdf['stdout'];
-                        /*
-                        //$replace = "$1$3";
-                        //$search = "/(Dests <<.*?)(#00)(.*?>>)/s";
-                        //$this->pdf = preg_replace($search, $replace, $this->pdf['stdout']);
-                        */
                         unlink($this->tmp);
                 }
                 /**
