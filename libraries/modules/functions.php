@@ -214,6 +214,7 @@ function GO($page, $sec=0){
 }
 
 function ALERT($msg, $back=false, $code=""){
+	 echo '<meta http-equiv="Content-Type" content="text/html; charset='.GET_CONFIG("site", "charset").'" />';
 	echo "<script>";
     echo "alert('".$msg."');";
     if($back){
