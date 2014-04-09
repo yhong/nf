@@ -59,12 +59,13 @@ if(!defined("APP_ROOT")){
     define("APP_ROOT", NAYUDA_ROOT.DS."apps");
 }
 
-/*
-if(!$_GET){
-    $arrHost = explode(".", $_SERVER["HTTP_HOST"]);
-    $_GET["sub_domain"] = $arrHost[0];
+// blocking the connect from cli
+if (isset($_SERVER['HTTP_HOST']) === TRUE) {
+          $host = $_SERVER['HTTP_HOST'];
+}else{
+        exit;
 }
-*/
+
 // get uri information
 $arrHost = explode(".", $_SERVER["HTTP_HOST"]);
 $_GET["sub_domain"] = $arrHost[0];
