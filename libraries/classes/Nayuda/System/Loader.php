@@ -20,6 +20,7 @@ class Loader extends Core{
 		// fix the basic value with index
         $arrParam = array();
 
+        $arrUrl = array();
         if($url){
             if(substr($url, -1)  == '/'){
                 $url = substr($url, 0, -1);
