@@ -60,11 +60,11 @@ function getModel($model, $alias=null, $config=null){
 	$modelPath = str_replace("_", DS, $model);
 	$include_file = MODEL_PATH.DS.$modelPath.".php";
 
-    if(!FILE_EXISTS_IN_PATH($include_file)){
-       $include_file = APP_ROOT.DS."base".DS.MAIN_APP_NAME.DS.MODEL_DIR.DS.$modelPath.".php";
-    }
+	if(!FILE_EXISTS_IN_PATH($include_file)){
+		$include_file = APP_ROOT.DS."base".DS.MAIN_APP_NAME.DS.MODEL_DIR.DS.$modelPath.".php";
+	}
 
-    if(FILE_EXISTS_IN_PATH($include_file)){
+	if(FILE_EXISTS_IN_PATH($include_file)){
 		require_once($include_file);
 		
 		$modelName = "Model_".$model;
@@ -76,8 +76,8 @@ function getModel($model, $alias=null, $config=null){
 		return $objModel;
 
 	}else{
-        die($include_file." does not exist!");
-    }
+		die($include_file." does not exist!");
+	}
 
 	return null;
 }
