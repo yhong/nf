@@ -78,6 +78,18 @@ class Model extends Core{
 	}
 
 	/**
+	 * getTableName()
+	 * @access public
+	 * 
+	 * @author eric hong(eric.hong81@gmail.com)
+     *
+	 * @return $value : table name
+	*/
+	public function getTableName(){
+		return $this->_name;
+	}
+
+	/**
 	 * setAlias()
 	 * @access public
 	 * 
@@ -379,8 +391,12 @@ class Model extends Core{
         }
 
 		foreach($data as $key=>$value){
-			$sField .= $key."=?,";
-			$arrValue[] = $value;
+            if($value[0] == '&'){
+                $sField .= $key."=".substr($value, 1).",";
+            }else{
+                $sField .= $key."=?,";
+                $arrValue[] = $value;
+            }
 		}
 
 		$sField = substr($sField, 0, -1);
