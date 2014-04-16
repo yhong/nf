@@ -494,4 +494,13 @@ function SET_PAGE($page, $model){
 	
 	return $next_page;
 }   	
+
+function IS_DEVELOPER_MODE(){
+    if (isset($_SERVER["NAYUDA_DEVELOPER_MODE"])) {
+        if($_SERVER["NAYUDA_DEVELOPER_MODE"] == "true"){
+            return true;
+        }
+    }
+    return false;
+}
 ?>
