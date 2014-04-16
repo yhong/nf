@@ -416,7 +416,7 @@ function GET_CONFIG($sCategory, $sAttributeName){
  */
 function I($sId){
 	// [HTTP_ACCEPT_LANGUAGE] => ko-kr,ko;q=0.7,en-us;q=0.3
-	$lang_list = explode(",", $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+	$lang_list = explode(",", SERVER('HTTP_ACCEPT_LANGUAGE'));
 
     // local
 	$selected_lang = "";
