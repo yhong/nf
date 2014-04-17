@@ -340,24 +340,33 @@ class Model extends Core{
 	 * @return $values : return row
 	*/
 	public function insert($data){
-		$sField = "";
-		$sValue = "";
-		$arrValue = array();
-		foreach($data as $key=>$value){
-			$sField .= $key.",";
-			$sValue .= "?,";
-			$arrValue[] = $value;
-		}
-		$sField = substr($sField, 0, -1);
-		$sValue = substr($sValue, 0, -1);
+		$arrValues = array();
 
-		$this->_query = "insert into ".$this->_name."(".$sField.") values(".$sValue.")";
+        for($i=0; $i<count($data); $i++){
+			$arrValues[] .= "?";
+		}
+
+		$sValues = implode(",", $arrValues);
+        $sField = implode(",", array_keys($data));
+
+		$this->_query = "insert into ".$this->_name."(".$sField.") values(".$sValues.")";
 
 		try{
 			$pResult = $this->_dbConn->prepare($this->_query);
+
+            $arrValue = array_values($data);
 			if(!$pResult->execute($arrValue)){
-                die("insert error!");
+                
+                if(IS_DEVELOPER_MODE() == true){
+                    $sFieldForDebug = implode(",", array_keys($data));
+                    $sValueForDebug = implode(",", array_values($data));
+
+                    echo "[INSERT ERROR] insert into ".$this->_name."(".$sFieldForDebug.") values(".$sValueForDebug.")<br/>\n";
+                }else{
+                    die("Insert Error!");
+                }
 				return false;
+
 			}else{
                 // return the inserted id
 				return $this->_dbConn->lastInsertId();
@@ -405,7 +414,22 @@ class Model extends Core{
 		try{
 			$pResult = $this->_dbConn->prepare($this->_query);
 			if(!$pResult->execute($arrValue)){
-                die("update error!");
+                if(IS_DEVELOPER_MODE() == true){
+
+                    reset($data);
+                    $sField = "";
+                    foreach($data as $key=>$value){
+                        if($value[0] == '&'){
+                            $sField .= $key."=".substr($value, 1).",";
+                        }else{
+                            $sField .= $key."=".$value.",";
+                        }
+                    }
+                    $sFieldForDebug = substr($sField, 0, -1);
+                    echo "[UPDATE ERROR] update ".$this->_name." set ".$sFieldForDebug." ".$where;
+                }else{
+                    die("Update Error!");
+                }
 				return false;
 			}
 			return $pResult;
