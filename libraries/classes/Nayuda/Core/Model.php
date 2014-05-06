@@ -361,7 +361,7 @@ class Model extends Core{
                     $sFieldForDebug = implode(",", array_keys($data));
                     $sValueForDebug = implode(",", array_values($data));
 
-                    echo "[INSERT ERROR] insert into ".$this->_name."(".$sFieldForDebug.") values(".$sValueForDebug.")<br/>\n";
+                    die("[INSERT ERROR] insert into ".$this->_name."(".$sFieldForDebug.") values(".$sValueForDebug.")<br/>\n");
                 }else{
                     die("Insert Error!");
                 }
@@ -426,7 +426,7 @@ class Model extends Core{
                         }
                     }
                     $sFieldForDebug = substr($sField, 0, -1);
-                    echo "[UPDATE ERROR] update ".$this->_name." set ".$sFieldForDebug." ".$where;
+                    die("[UPDATE ERROR] update ".$this->_name." set ".$sFieldForDebug." ".$where);
                 }else{
                     die("Update Error!");
                 }

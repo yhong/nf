@@ -221,7 +221,7 @@
                  * @param string $file The PDF's filename (the usage depends on $mode.
                  * @return string|boolean Depending on $mode, this may be success (boolean) or PDF (string).
                  */
-                public function output($mode,$file){
+                public function output($mode, $file=null){
                         switch($mode){
                                 case self::$PDF_DOWNLOAD:
                                         if(!headers_sent()){
